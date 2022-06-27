@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+// Built-in modules
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+
+// Mixkit settings and modules
+@use "mixkit/settings" as settings;
+
+/// Evaluate emptiness.
+///
+/// @name empty
+///
+/// @group mixkit/validate
+///
+/// @param {string|number|color|list|map|boolean|null|function} $value
+///   Value to check.
+///
+/// @return {boolean}
+///
+/// @access public
+///
+/// @since 1.0.0
+
+@function empty($value) {
+  @if not
+    $value or
+    $value == "" or
+    $value == " " or
+    $value == 0 or
+    $value == () or
+    length($value) == 0 {
+    @return true;
+  }
+  @return false;
+}

@@ -1,0 +1,51 @@
+@charset "UTF-8";
+
+// Built-in modules
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+
+// Settings and debugging
+@use "mixkit/settings" as settings;
+
+/// Recursively convert a list to a string.
+///
+/// @name list-to-string
+///
+/// @group mixkit/convert/utility
+///
+/// @param {list} $value
+///   List to convert.
+///
+/// @param {string} $string - [""]
+///   (Optional) String to append results to.
+///
+/// @return {string}
+///
+/// @access public
+///
+/// @since 1.0.0
+
+@function list-to-string($value, $string: "") {
+  // Logic
+  @for $i from 1 through list.length($value) {
+    $char: list.nth($value, $i);
+
+    // Logic: Recursively convert nested lists
+    @if meta.type-of($char) == "list" {
+      $string: $string + list-to-string($char, $string: "");
+    }
+
+    // Logic: Convert rest
+    @else {
+      $char: string.quote(string.unquote("#{$char}"));
+      $string: string.insert($string, $char, $i);
+    }
+  }
+
+  @return $string;
+}

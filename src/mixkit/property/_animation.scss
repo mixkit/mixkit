@@ -1,0 +1,138 @@
+@charset "UTF-8";
+
+// Built-in modules
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+
+// Mixkit settings and modules
+@use "mixkit/settings" as settings;
+
+/// Generate `animation` declarations.
+///
+/// @name animation
+///
+/// @group mixkit/property
+///
+/// @param {string} $name|$n - [null]
+///   `animation-name`.
+///
+/// @param {number (with length)} $duration|$dur - [null]
+///   `animation-duration`.
+///
+/// @param {string} $timing|$t - [null]
+///   `animation-timing-function`.
+///
+/// @param {number (with length)} $delay|$d - [null]
+///   `animation-delay`.
+///
+/// @param {string|number} $count|$c - [null]
+///   `animation-iteration-count`.
+///
+/// @param {string} $direction|$dir - [null]
+///   `animation-direction`.
+///
+/// @param {string} $fill|$f - [null]
+///   `animation-fill-mode`.
+///
+/// @output CSS declarations.
+///
+/// @example scss
+///   // Input
+///   .element {
+///     @include animation($name: spin, $dur: 1s, $del: 0s, $t: ease);
+///   }
+///
+///   // CSS output
+///   .element {
+///     animation-name: spin;
+///     animation-duration: 1s;
+///     animation-delay: 0s;
+///     animation-timing-function: ease;
+///   }
+///
+/// @access public
+///
+/// @since 1.0.0
+
+@mixin animation(
+  $name: null,
+  $n: null,
+  $duration: null,
+  $dur: null,
+  $timing: null,
+  $t: null,
+  $delay: null,
+  $del: null,
+  $count: null,
+  $c: null,
+  $direction: null,
+  $dir: null,
+  $fill: null,
+  $f: null
+) {
+  $animation: (
+    "name": animation-name $name,
+    "n": animation-name $n,
+    "duration": animation-duration $duration,
+    "dur": animation-duration $dur,
+    "timing": animation-timing-function $timing,
+    "t": animation-timing-function $t,
+    "delay": animation-delay $delay,
+    "del": animation-delay $del,
+    "count": animation-iteration-count $count,
+    "c": animation-iteration-count $c,
+    "direction": animation-direction $direction,
+    "dir": animation-direction $dir,
+    "fill": animation-fill-mode $fill,
+    "f": animation-fill-mode $f,
+  );
+
+  @each $key, $value in $animation {
+    $prop: list.nth($value, 1);
+    $val: list.nth($value, 2);
+    @if $val {
+      #{$prop}: $val;
+    }
+  }
+}
+
+/// Generate animation `@keyframes`.
+///
+/// @name keyframes
+///
+/// @group mixkit/property
+///
+/// @param {string} $name
+///  Animation name reference.
+///
+/// @output CSS declarations.
+///
+/// @example scss
+///   // Input
+///   @include keyframes(animation-1) {
+///     0% { opacity: 1; }
+///     50% { opacity: .5; }
+///     100% { opacity: 0; }
+///   }
+///
+///   // CSS output
+///   @keyframes animation-1 {
+///     0% { opacity: 1; }
+///     50% { opacity: .5; }
+///     100% { opacity: 0; }
+///   }
+///
+/// @access public
+///
+/// @since 1.0.0
+
+@mixin keyframes($name) {
+  @keyframes #{$name} {
+    @content;
+  }
+}

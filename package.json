@@ -1,0 +1,33 @@
+{
+  "name": "@mixkit/mixkit",
+  "version": "1.0.0-alpha.1",
+  "description": "A lightweight, general-purpose Sass utility library.",
+  "repository": "git+https://github.com/mixkit/mixkit.git",
+  "keywords": [
+    "css",
+    "scss",
+    "sass",
+    "flexbox",
+    "sass-mixins",
+    "sass-library",
+    "sass-framework",
+    "mixkit"
+  ],
+  "author": "Mixkit",
+  "license": "MIT",
+  "homepage": "https://github.com/mixkit/mixkit#readme",
+  "bugs": {
+    "url": "https://github.com/mixkit/mixkit/issues"
+  },
+  "scripts": {
+    "expand": "sass --style expanded --source-map test/test.scss:test/test.css --load-path=src"
+  },
+  "devDependencies": {
+    "@mixkit/stylelint-config": "^1.0.0-alpha.2",
+    "eslint": "^8.18.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "prettier": "^2.7.1",
+    "sass": "^1.53.0"
+  }
+}

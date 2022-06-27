@@ -1,0 +1,73 @@
+@charset "UTF-8";
+
+// Built-in modules
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+
+// Mixkit settings and modules
+@use "mixkit/settings" as settings;
+@use "to-number" as *;
+
+/// Convert a string or number to a list.
+///
+/// @name to-list
+///
+/// @group mixkit/convert
+///
+/// @param {string|number} $value
+///
+/// @require {function} to-number
+///
+/// @return {list}
+///
+/// @require {function (mixkit/convert)} to-number
+///
+/// @access public
+///
+/// @since 1.0.0
+
+@function to-list($value, $separator: auto) {
+  // Vars
+  $list: ();
+
+  // Check args
+  @if not meta.type-of($value) == "string" or not
+    meta.type-of($value) == "number" {
+    @error "Invalid argument type/s.";
+  }
+
+  // Return immediately
+  @if meta.type-of($value) == "list" {
+    @return $value;
+  }
+
+  // Logic: "string"
+  @if meta.type-of($value) == "string" {
+    $length: string.length($value);
+
+    @for $i from 1 through $length {
+      $char: string.slice($value, $i, $i);
+      $list: list.append($list, $char, $separator);
+    }
+
+    @return $list;
+  }
+
+  // Logic: "number"
+  @else if meta.type-of($value) == "number" {
+    $value: string.quote(string.unquote("#{$value}"));
+    $length: string.length($value);
+
+    @for $i from 1 through $length {
+      $char: string.slice($value, $i, $i);
+      $list: list.append($list, to-number($char), $separator);
+    }
+
+    @return $list;
+  }
+}

@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+// Built-in modules
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+
+// Mixkit settings and modules
+@use "mixkit/settings" as settings;
+
+/// Specify or confirm type.
+///
+/// @name type
+///
+/// @group mixkit/validate
+///
+/// @param {string|number|list|map|color|boolean|null|function} $value
+///   Value to evaluate.
+///
+/// @param {string} $is-type
+///   [null] - (Optional) Type to evaluate against.
+///
+/// @return {string|boolean}
+///
+/// @since 1.0.0
+
+@function type($value, $is-type: null) {
+  @if $value {
+    $type: meta.type-of($value);
+    @if not $is-type {
+      @return $type;
+    } @else {
+      @return $type == $is-type;
+    }
+  } @else {
+    @error "Missing argument/s.";
+  }
+  @return false;
+}

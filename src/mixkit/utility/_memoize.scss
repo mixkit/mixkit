@@ -1,0 +1,52 @@
+@charset "UTF-8";
+
+// Built-in modules
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+
+// Mixkit settings and modules
+@use "mixkit/settings" as settings;
+@use "mixkit/validate" as validate;
+
+/// Memoize heavy functions.
+///
+/// @name memoize|cache
+///
+/// @group mixkit/utility
+///
+/// @param {string} $func
+///   Function name.
+///
+/// @param {string} $module
+///   Module namespace.
+///
+/// @param {*} $args...
+///   Function arguments.
+///
+/// @return {*}
+///
+/// @since 1.0.0
+
+// Cached variable
+$cached: settings.$cached;
+
+@function memoize($func, $module, $args...) {
+  $fetch: map.get($cached, ($func, $args));
+  @if $fetch != null {
+    @return $fetch;
+  } @else {
+    $result: meta.call(meta.get-function($func, false, $module), $args...);
+    $cached: map.merge($cached, (($func, $args): $result)) !global;
+    @return $result;
+  }
+}
+
+// Alias
+@function cache($args...) {
+  @return meta.call(meta.get-function("memoize"), $args...);
+}

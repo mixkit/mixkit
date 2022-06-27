@@ -1,0 +1,130 @@
+@charset "UTF-8";
+
+// Built-in modules
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+
+// Mixkit settings and modules
+@use "mixkit/settings" as settings;
+@use "mixkit/shorthand" as shorthand;
+
+/// Configure `border-radius` with shorthand
+///
+/// @name border-radius|br
+///
+/// @group mixkit/property
+///
+/// @param {number (with unit)|list (with units)} $shorthand
+///
+/// @access public
+///
+/// @since 1.0.0
+
+@mixin border-radius($shorthand) {
+  $map: shorthand.define("map", $shorthand);
+  border-bottom-left-radius: map.get($map, 4);
+  border-bottom-right-radius: map.get($map, 2);
+  border-top-left-radius: map.get($map, 3);
+  border-top-right-radius: map.get($map, 1);
+}
+
+@mixin br($shorthand) {
+  $map: shorthand.define("map", $shorthand);
+  border-bottom-left-radius: map.get($map, 4);
+  border-bottom-right-radius: map.get($map, 2);
+  border-top-left-radius: map.get($map, 3);
+  border-top-right-radius: map.get($map, 1);
+}
+
+/// Configure `border-top-left-radius` and `border-top-right-radius`
+///
+/// @name border-top-radius|btr
+///
+/// @group mixkit/property
+///
+/// @param {number (with unit)} $radii
+///
+/// @access public
+///
+/// @since 1.0.0
+
+@mixin border-top-radius($radii) {
+  border-top-left-radius: $radii;
+  border-top-right-radius: $radii;
+}
+
+@mixin btr($radii) {
+  border-top-left-radius: $radii;
+  border-top-right-radius: $radii;
+}
+
+/// Configure `border-top-right-radius` and `border-bottom-right-radius`
+///
+/// @name border-right-radius|brr
+///
+/// @group mixkit/property
+///
+/// @param {number (with unit)} $radii
+///
+/// @access public
+///
+/// @since 1.0.0
+
+@mixin border-right-radius($radii) {
+  border-bottom-right-radius: $radii;
+  border-top-right-radius: $radii;
+}
+
+@mixin brr($radii) {
+  border-bottom-right-radius: $radii;
+  border-top-right-radius: $radii;
+}
+
+/// Configure `border-bottom-right-radius` and `border-bottom-left-radius`
+///
+/// @name border-bottom-radius|bbr
+///
+/// @group mixkit/property
+///
+/// @param {number (with unit)} $radii
+///
+/// @access public
+///
+/// @since 1.0.0
+
+@mixin border-bottom-radius($radii) {
+  border-bottom-left-radius: $radii;
+  border-bottom-right-radius: $radii;
+}
+
+@mixin bbr($radii) {
+  border-bottom-left-radius: $radii;
+  border-bottom-right-radius: $radii;
+}
+
+/// Configure `border-top-left-radius` and `border-bottom-left-radius`
+///
+/// @name border-left-radius|blr
+///
+/// @group mixkit/property
+///
+/// @param {number (with unit)} $radii
+///
+/// @access public
+///
+/// @since 1.0.0
+
+@mixin border-left-radius($radii) {
+  border-bottom-left-radius: $radii;
+  border-top-left-radius: $radii;
+}
+
+@mixin blr($radii) {
+  border-bottom-left-radius: $radii;
+  border-top-left-radius: $radii;
+}

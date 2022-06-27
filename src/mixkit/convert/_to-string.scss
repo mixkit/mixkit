@@ -1,0 +1,93 @@
+@charset "UTF-8";
+
+// Built-in modules
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+
+// Settings and debugging
+@use "mixkit/settings" as settings;
+@use "mixkit/convert/utility" as *;
+
+/// Convert input to string and/or transform letter casing.
+///
+/// @name to-string
+///
+/// @group mixkit/convert
+///
+/// @param {string|number|color|list|map|boolean|null} $value
+///   Value to convert.
+///
+/// @param {string [uppercase|upper|u]|[lowercase|lower|l]} $to - [null]
+///   Change letter casing.
+///
+/// @param {boolean} $keys - [false]
+///   Convert map keys to string instead of map values.
+///
+/// @return {string}
+///
+/// @require {function (mixkit/convert/utility)} list-to-string
+///
+/// @require {function (mixkit/convert/utility)} map-to-string
+///
+/// @access public
+///
+/// @since 1.0.0
+
+@function to-string($value, $to: null, $keys: false) {
+  // Vars
+  $string: "";
+
+  // Check args
+  @if not meta.type-of($value) == "string" or not
+    meta.type-of($value) == "number" or not
+    meta.type-of($value) == "list" or not
+    meta.type-of($value) == "map" or not
+    meta.type-of($value) == "color" or not
+    meta.type-of($value) == "boolean" or not
+    meta.type-of($value) == "null" {
+    @error "Invalid argument type/s.";
+  }
+
+  // Return immediately
+  @if meta.type-of($value) == "string" {
+    $string: $value;
+  }
+
+  // Logic: "number", "color", "boolean", "null"
+  @if meta.type-of($value) == "number" or
+    meta.type-of($value) == "color" or
+    meta.type-of($value) == "boolean" or
+    meta.type-of($value) == "null" {
+    $string: string.quote(string.unquote("#{$value}"));
+  }
+
+  // Logic: "list"
+  @else if meta.type-of($value) == "list" {
+    $string: list-to-string($value, $string);
+  }
+
+  // Logic: "map"
+  @else if meta.type-of($value) == "map" {
+    $string: map-to-string($value, $string, $keys);
+  }
+
+  // Logic: uppercase
+  @if $to == "uppercase" or $to == "upper" or $to == "u" {
+    @return string.to-uppercase($string);
+  }
+
+  // Logic: lowercase
+  @else if $to == "lowercase" or $to == "lower" or $to == "l" {
+    @return string.to-lower-case($string);
+  }
+
+  // Logic: default
+  @else if $to == null {
+    @return $string;
+  }
+}

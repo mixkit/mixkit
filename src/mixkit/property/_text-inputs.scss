@@ -1,0 +1,93 @@
+@charset "UTF-8";
+
+// Built-in modules
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+
+// Mixkit settings and modules
+@use "mixkit/settings" as settings;
+
+/// List of text based HTML inputs.
+///
+/// @group mixkit/property
+///
+/// @type list
+///
+/// @access private
+///
+/// @since 1.0.0
+
+$_text-inputs: (
+  "[type='color']",
+  "[type='date']",
+  "[type='datetime']",
+  "[type='datetime-local']",
+  "[type='email']",
+  "[type='month']",
+  "[type='number']",
+  "[type='password']",
+  "[type='search']",
+  "[type='tel']",
+  "[type='text']",
+  "[type='time']",
+  "[type='url']",
+  "[type='week']",
+  "input:not([type])",
+  "textarea",
+);
+
+/// Assign psuedo classes to input list
+///
+/// @name _assign-inputs
+///
+/// @group mixkit/property
+///
+/// @param {list | string} $inputs
+///   A selector, or list of selectors, to apply the pseudo-class to.
+///
+/// @param {pseudo-class} $pseudo [null]
+///   The pseudo-class to be appended.
+///
+/// @output {list}
+///
+/// @access private
+///
+/// @since 1.0.0
+
+@function _assign-inputs($inputs, $pseudo: null) {
+  $list: ();
+  @each $input in $inputs {
+    $input: string.unquote($input);
+    $input: if($pseudo, $input + ":" + $pseudo, $input);
+    $list: append($list, $input, comma);
+  }
+  @return $list;
+}
+
+/// Create CSS declaration block and CSS rules for text input list.
+///
+/// @name text-inputs
+///
+/// @group mixkit/property
+///
+/// @param {string} $psuedo
+///
+/// @output CSS declaration block.
+///
+/// @require {mixin (mixkit/property)} _assign-inputs
+///
+/// @access public
+///
+/// @since 1.0.0
+
+@mixin text-inputs($psuedo: null) {
+  $list: _assign-inputs($_text-inputs, $psuedo);
+  #{$list} {
+    @content;
+  }
+}

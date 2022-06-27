@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+// Built-in modules
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+
+// Mixkit settings and modules
+@use "mixkit/settings" as settings;
+
+/// Strips the unit from a number.
+///
+/// @name strip-unit
+///
+/// @group mixkit/utility
+///
+/// @param {number} $n
+///
+/// @return {number (unitless)}
+///
+/// @access public
+///
+/// @since 1.0.0
+
+@function strip-unit($n) {
+  @return ($n / ($n * 0 + 1));
+}

@@ -1,0 +1,52 @@
+@charset "UTF-8";
+
+/// Ratios for use with modular functions.
+///
+/// @group mixkit/modular/helpers
+///
+/// @type number (unitless)
+///
+/// @see {function (mixkit/modular/helpers)} scale
+///
+/// @access public
+///
+/// @since 1.0.0
+
+$minor-second: 1.066666667;
+$major-second: 1.125;
+$minor-third: 1.2;
+$major-third: 1.25;
+$perfect-fourth: 1.333333333;
+$augmented-fourth: 1.41421;
+$perfect-fifth: 1.5;
+$minor-sixth: 1.6;
+$phi: 1.618034;
+$golden: $phi;
+$major-sixth: 1.666666667;
+$minor-seventh: 1.777777778;
+$major-seventh: 1.875;
+$octave: 2;
+$major-tenth: 2.5;
+$major-eleventh: 2.666666667;
+$major-twelfth: 3;
+$pi: 3.14159265359;
+$double-octave: 4;
+
+// Shorthand aliases
+$min-2: $minor-second;
+$maj-2: $major-second;
+$min-3: $minor-third;
+$maj-3: $major-third;
+$per-4: $perfect-fourth;
+$aug-4: $augmented-fourth;
+$per-5: $perfect-fifth;
+$min-6: $minor-sixth;
+$gld: $golden;
+$maj-6: $major-sixth;
+$min-7: $minor-seventh;
+$maj-7: $major-seventh;
+$oct: $octave;
+$maj-10: $major-tenth;
+$maj-11: $major-eleventh;
+$maj-12: $major-twelfth;
+$oct-2x: $double-octave;

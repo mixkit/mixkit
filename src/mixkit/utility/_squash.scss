@@ -1,0 +1,35 @@
+@charset "UTF-8";
+
+// Built-in modules
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+
+// Mixkit settings and modules
+@use "mixkit/settings" as settings;
+
+/// Merge unlimited maps.
+///
+/// @name squash
+///
+/// @group mixkit/utility
+///
+/// @param {map} $maps...
+///
+/// @return {map}
+///
+/// @since 1.0.0
+
+@function squash($maps...) {
+  $merged: ();
+  @each $map in $maps {
+    @if meta.type-of($map) == "map" {
+      $merged: map.deep-merge($merged, $map);
+    }
+  }
+  @return $merged;
+}

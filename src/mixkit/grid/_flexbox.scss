@@ -1,0 +1,100 @@
+@charset "UTF-8";
+
+// Built-in modules
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+
+// Mixkit settings and modules
+@use "mixkit/settings" as settings;
+
+/// Generate flexbox grid CSS API.
+///
+/// @name flexbox
+///
+/// @group mixkit/grid
+///
+/// @output CSS declaration blocks.
+///
+/// @access public
+///
+/// @since 1.0.0
+
+@mixin flexbox-grid-css {
+  // stylelint-disable
+  $columns: settings.$columns;
+  $gaps: settings.$grid-gaps;
+  $grid-infix: map.get(settings.$infixes, "grid");
+  $gap-infix: map.get(settings.$infixes, "grid-gap");
+  $gap-noun: map.get(settings.$nouns, "grid", "gap");
+
+  /// Default [grid-area]
+  ///
+  /// @since 1.0.0
+
+  [data-grid~="area"] {
+    position: relative;
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  // Logic: `grid-gap` trait rules
+  @each $key, $data in $gaps {
+    $class: map.get(settings.$grid-gaps, $key, "class");
+    $value: map.get(settings.$grid-gaps, $key, "value");
+    $value-2x: $value * 2;
+    $metric: map.get(settings.$grid-gaps, $key, "metric");
+
+    [data-grid~="#{$gap-noun}#{$gap-infix}#{$class}"][data-grid~="area"] {
+      width: calc(100% + #{$value-2x}#{$metric}) !important;
+      max-width: calc(100% + #{$value-2x}#{$metric});
+      // margin: string.unquote("-#{$value-2x}#{$metric}") 0;
+      margin: string.unquote("-#{$value}#{$metric}") 0;
+    }
+  }
+
+  // Logic: Generate responsive grid rules
+  @each $key, $data in settings.$breakpoints {
+    $bp-class: map.get(settings.$breakpoints, $key, "class");
+    $bp-value: #{map.get(settings.$breakpoints, $key, "value")}px;
+
+    @media (min-width: $bp-value) {
+      @each $key, $data in $columns {
+        $col-class: map.get($columns, $key, "class");
+        $col-value: map.get($columns, $key, "width");
+        $grid-item: #{$bp-class}#{$grid-infix}#{$col-class};
+
+        @if $bp-class == "" {
+          $grid-item: #{$col-class};
+        }
+
+        [data-grid~="#{$grid-item}"] {
+          max-width: $col-value;
+          flex: 0 0 $col-value;
+        }
+
+        // Logic: `grid-gap` trait rules
+        @each $key, $data in $gaps {
+          $class: map.get(settings.$grid-gaps, $key, "class");
+          $value: map.get(settings.$grid-gaps, $key, "value");
+          $value-2x: $value * 2;
+          $metric: map.get(settings.$grid-gaps, $key, "metric");
+
+          [data-grid~="#{$gap-noun}#{$gap-infix}#{$class}"][data-grid~="area"][data-grid~="#{$grid-item}"] {
+            max-width: calc(#{$col-value} - #{$value-2x}#{$metric});
+            flex: 0 0 calc(#{$col-value} - #{$value-2x}#{$metric});
+            margin: #{$value}#{$metric};
+          }
+        }
+      }
+    }
+  }
+}

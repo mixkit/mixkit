@@ -1,0 +1,133 @@
+@charset "UTF-8";
+
+// Built-in modules
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+
+/// Absolute lengths.
+///
+/// @link https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units#numbers_lengths_and_percentages
+///
+/// @type list
+///
+/// @access public
+///
+/// @since 1.0.0
+
+$absolute: ("cm", "mm", "Q", "in", "pc", "pt", "px");
+
+/// Relative lengths.
+///
+/// @link https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units#numbers_lengths_and_percentages
+///
+/// @type list
+///
+/// @access public
+///
+/// @since 1.0.0
+
+$relative: (
+  "em",
+  "ex",
+  "ch",
+  "rem",
+  // "lh",
+  "vw",
+  "vh",
+  "vmin",
+  "vmax"
+);
+
+/// Dimensions.
+///
+/// @link https://developer.mozilla.org/en-US/docs/Web/CSS/dimension
+///
+/// @type list
+///
+/// @access public
+///
+/// @since 1.0.0
+
+$dimension: (
+  "deg",
+  "ms",
+  "s",
+  // "hz",
+  // "Hz",
+  // "vw",
+  // "vh",
+  // "vmin",
+  // "vmax",
+);
+
+/// Percentage.
+///
+/// @link https://developer.mozilla.org/en-US/docs/Web/CSS/percentage
+///
+/// @type string
+///
+/// @access public
+///
+/// @since 1.0.0
+
+$percentage: "%";
+
+/// Merged lists.
+///
+/// @link https://developer.mozilla.org/en-US/docs/Web/CSS/percentage
+///
+/// @type list
+///
+/// @access public
+///
+/// @since 1.0.0
+
+$list-all: list.zip($absolute, $relative, $dimension, $percentage);
+
+/// Map.
+///
+/// @link https://developer.mozilla.org/en-US/docs/Web/CSS/percentage
+///
+/// @type list
+///
+/// @access public
+///
+/// @since 1.0.0
+
+$map-all: (
+  // Absolute
+  "cm": 1cm,
+  "mm": 1mm,
+  "q": 1q,
+  "in": 1in,
+  "pc": 1pc,
+  "pt": 1pt,
+  "px": 1px,
+  // Relative
+  "em": 1em,
+  "ex": 1ex,
+  "ch": 1ch,
+  "rem": 1rem,
+  // "lh": 1lh,
+  "vw": 1vw,
+  "vh": 1vh,
+  "vmin": 1vmin,
+  "vmax": 1vmax,
+  // Dimensions
+  "deg": 1deg,
+  "ms": 1ms,
+  "s": 1s,
+  // "hz": 1hz,
+  // "Hz": 1Hz,
+  // "vw": 1vw,
+  // "vh": 1vh,
+  // "vmin": 1vmin,
+  // "vmax": 1vmax,
+  // Percentage
+  "%": 1%
+);

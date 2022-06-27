@@ -1,0 +1,209 @@
+@charset "UTF-8";
+
+// Built-in modules
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+
+// Mixkit settings and modules
+@use "mixkit/settings" as settings;
+@use "mixkit/modular/helpers" as *;
+
+/// Generate base and ratio values for modular scale computatiton.
+///
+/// @name _settings
+///
+/// @group mixkit/modular
+///
+/// @param {number (with unit)} $base - [false]
+///   A valid CSS length. i.e 1em, 16px
+///
+/// @param {number} $ratio - [false]
+///   Ratio to be used. Ratio variables are stored in "mixkit/modular/helpers"
+///
+/// @param {map} $thread - [false]
+///   Thread to reference.
+///
+/// @param {map} $modular-scale - [settings.$modular-scale]
+///   Modular scale configuration.
+///
+/// @output Computed base and ratio values.
+///
+/// @access private
+///
+/// @since 1.0.0
+
+@function _settings(
+  $base: false,
+  $ratio: false,
+  $thread: false,
+  $modular-scale: settings.$modular-scale
+) {
+  // Logic: Assign default or inline settings
+  $base: if($base, $base, settings.$modular-base);
+  $ratio: if($ratio, $ratio, settings.$modular-ratio);
+  $thread: map.get($modular-scale, $thread);
+
+  // Logic: Assign user settings for $base
+  @if map.get($modular-scale, base) {
+    $base: map.get($modular-scale, base);
+  }
+
+  // Logic: Assign user settings for $ratio
+  @if map.get($modular-scale, ratio) {
+    $ratio: map.get($modular-scale, ratio);
+  }
+
+  // Logic: Assign user settings for thread $base and $ratio
+  @if $thread {
+    @if map.get($thread, base) {
+      $base: map.get($thread, base);
+    }
+    @if map.get($thread, ratio) {
+      $ratio: map.get($thread, ratio);
+    }
+  }
+
+  @return $base $ratio;
+}
+
+/// Sorts a list.
+///
+/// @name _sort
+///
+/// @group mixkit/modular
+///
+/// @param {list} $list
+///
+/// @output {list (sorted)}.
+///
+/// @access private
+///
+/// @since 1.0.0
+
+// ! Refactor
+
+@function _sort($list) {
+  $sorted: false;
+
+  // Logic: Perform while $sorted is false
+  @while not $sorted {
+    $sorted: true;
+
+    // Swap integers
+    @for $i from 2 through list.length($list) {
+      $n1: list.nth($list, $i - 1);
+      $n2: list.nth($list, $i);
+      @if $n1 > $n2 {
+        $list: list.set-nth($list, $i, $n1);
+        $list: list.set-nth($list, $i - 1, $n2);
+        $sorted: false;
+      }
+    }
+  }
+
+  @return $list;
+}
+
+/// Return a value based on modular computation.
+///
+/// @name modular-scale|ms
+///
+/// @group mixkit/modular
+///
+/// @param {number (with unit)} $value - [0]
+///   Number of steps to increment up or down the scale.
+///
+/// @param {number (with unit)} $base - [false]
+///   A valid CSS length. i.e 1em, 16px
+///
+/// @param {number} $ratio - [false]
+///   Ratio to be used. Ratio variables are stored in "mixkit/modular/helpers"
+///
+/// @param {map} $thread - [false]
+///   Thread to reference.
+///
+/// @param {map} $modular-scale - [settings.$modular-scalde]
+///   Modular scale configuration.
+///
+/// @require {function (mixkit/modular)} _settings
+///
+/// @require {function (mixkit/modular)} _sort
+///
+/// @output CSS length.
+///
+/// @access public
+///
+/// @since 1.0.0
+
+// ! Update to math.div() for division when Sass releases new syntax.
+// ! "x/y" and "(x/y)" will break.
+
+@function modular-scale(
+  $value: 0,
+  $base: false,
+  $ratio: false,
+  $thread: false,
+  $modular-scale: settings.$modular-scale
+) {
+  $settings: _settings($base, $ratio, $thread, $modular-scale);
+  $base: list.nth($settings, 1);
+  $ratio: list.nth($settings, 2);
+
+  // Logic: Return if single-stranded
+  @if list.length($base) == 1 {
+    @return math.pow($ratio, $value) * $base;
+  }
+
+  // Logic: Return if multi-stranded
+  @else if list.length($base) > 1 {
+    // Create new bases list, set main base
+    $new-bases: (list.nth($base, 1));
+    $main-base: list.nth($new-bases, 1);
+
+    // Process other base values
+    @for $i from 2 through list.length($base) {
+      $subject: list.nth($base, $i);
+
+      // Logic: Target is greater than main base
+      @if $subject > $main-base {
+        @while $subject > $main-base {
+          // ! Update to math.div() here
+          $subject: ($subject / $ratio);
+        }
+        $subject: $subject * $ratio;
+      }
+
+      // Logic: Target is less than main base
+      @else if $subject < $main-base {
+        @while $subject < $main-base {
+          $subject: $subject * $ratio;
+        }
+      }
+
+      // Push into $new-bases
+      $new-bases: list.append($new-bases, $subject);
+    }
+
+    // Sort $new-bases list
+    $new-bases: _sort($new-bases);
+
+    // Find step to use in calculation
+    $calc-step: math.floor($value / list.length($new-bases));
+
+    // Find base to use in calculation
+    $calc-base: math.round(($value / list.length($new-bases) - $calc-step) * list.length($new-bases)) + 1;
+
+    // Return scaled value
+    @return math.pow($ratio, $calc-step) * list.nth($new-bases, $calc-base);
+  }
+}
+
+// Alias
+@function ms($args...) {
+  @return meta.call(meta.get-function("modular-scale"), $args...);
+}

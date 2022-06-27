@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+// Built-in modules
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+
+// Mixkit settings and modules
+@use "mixkit/settings" as settings;
+@use "mixkit/convert" as convert;
+
+/// Checks for a valid CSS length.
+///
+/// @name is-length
+///
+/// @group mixkit/validate
+///
+/// @argument {string} $value
+///   Value to check.
+///
+/// @return {boolean}
+///
+/// @require {functino} to-string
+///
+/// @access public
+///
+/// @since 1.0.0
+
+@function is-length($value) {
+  @return meta.type-of($value) != null and (
+    string.slice($value + "", 1, 4) == "calc" or
+    string.slice($value + "", 1, 3) == "var" or
+    string.slice($value + "", 1, 3) == "env" or not not
+    string.index(convert.to-string(auto inherit initial 0), convert.to-string($value)) or
+    (meta.type-of($value) == "number" and not math.is-unitless($value))
+  );
+}

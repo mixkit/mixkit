@@ -1,0 +1,78 @@
+@charset "UTF-8";
+
+// Built-in modules
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:selector";
+@use "sass:string";
+
+// Mixkit settings and modules
+@use "mixkit/settings" as settings;
+@use "to-string" as *;
+
+/// Convert a string or number to a list.
+///
+/// @name to-number
+///
+/// @group mixkit/convert
+///
+/// @param {string} $value
+///
+/// @return {number}
+///
+/// @require {function (mixkit/convert)} to-string
+///
+/// @access public
+///
+/// @since 1.0.0
+
+@function to-number($value) {
+  // Vars
+  $result: 0;
+  $digits: 0;
+  $minus: string.slice($value, 1, 1) == "-";
+  $numbers: (
+    "0": 0,
+    "1": 1,
+    "2": 2,
+    "3": 3,
+    "4": 4,
+    "5": 5,
+    "6": 6,
+    "7": 7,
+    "8": 8,
+    "9": 9,
+  );
+
+  // Check args
+  @if not meta.type-of($value) == "string" or not
+    meta.type-of($value) == "number" {
+    @error "Invalid argument type/s.";
+  }
+
+  // Return immediately
+  @if meta.type-of($value) == "number" {
+    @return $value;
+  }
+
+  // Convert value to number
+  @for $i from if($minus, 2, 1) through string.length($value) {
+    $char: string.slice($value, $i, $i);
+
+    @if string.index(to-string(map.keys($numbers)), $char) or $char == "." {
+      @if $char == "." {
+        $digits: 1;
+      } @else if $digits == 0 {
+        $result: $result * 10 + map.get($numbers, $char);
+      } @else {
+        $digits: $digits * 10;
+        $result: $result + map.get($numbers, $char) / $digits;
+      }
+    }
+  }
+
+  @return if($minus, -$result, $result);
+}
