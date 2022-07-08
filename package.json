@@ -1,6 +1,6 @@
 {
   "name": "@mixkit/mixkit",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "A lightweight, general-purpose Sass utility library.",
   "repository": "git+https://github.com/mixkit/mixkit.git",
   "keywords": [
