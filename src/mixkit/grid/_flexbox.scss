@@ -24,10 +24,15 @@
 ///
 /// @since 1.0.0
 
-@mixin flexbox-grid-css {
+@mixin flexbox-grid-css(
+  $breakpoints: settings.$breakpoints,
+  $columns: settings.$columns,
+  $gaps: settings.$grid-gaps
+) {
   // stylelint-disable
-  $columns: settings.$columns;
-  $gaps: settings.$grid-gaps;
+//   $breakpoints: settings.$breakpoints;
+//   $columns: settings.$columns;
+//   $gaps: settings.$grid-gaps;
   $grid-infix: map.get(settings.$infixes, "grid");
   $gap-infix: map.get(settings.$infixes, "grid-gap");
   $gap-noun: map.get(settings.$nouns, "grid", "gap");
